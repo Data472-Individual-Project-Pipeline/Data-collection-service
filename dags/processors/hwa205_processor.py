@@ -40,7 +40,7 @@ class Hwa205Processor:
         cursor = conn.cursor()
         try:
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS hua_aqi_stations (
+                CREATE TABLE IF NOT EXISTS hwa205_aqi (
                     id SERIAL PRIMARY KEY,
                     StationCode TEXT,
                     StationName TEXT,
@@ -54,7 +54,7 @@ class Hwa205Processor:
                     MonitorTypeCode TEXT,
                     MonitorTypeDescription TEXT,
                     MonitorFullName TEXT,
-                    insertTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 )
             """)
@@ -73,7 +73,7 @@ class Hwa205Processor:
             duplicate_count = 0
             for item in items:
                 cursor.execute("""
-                    SELECT 1 FROM hua_aqi_stations WHERE 
+                    SELECT 1 FROM hwa205_aqi WHERE 
                         StationCode = %s AND 
                         StationName = %s AND 
                         StationShortName = %s AND 
@@ -105,7 +105,7 @@ class Hwa205Processor:
                     duplicate_count += 1
                 else:
                     cursor.execute("""
-                        INSERT INTO hua_aqi_stations (
+                        INSERT INTO hwa205_aqi (
                             StationCode, StationName, StationShortName, StationLocation, StationCity,
                             StationLatitude, StationLongitude, MonitorChannel, MonitorName,
                             MonitorTypeCode, MonitorTypeDescription, MonitorFullName, owner

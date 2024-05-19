@@ -16,7 +16,7 @@ default_args = {
 }
 
 dag = DAG(
-    'hwa205_collection_pipeline',
+    'collection_pipeline_hwa205_v2',
     default_args=default_args,
     description='A DAG to collect data from HWA205 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
@@ -25,7 +25,7 @@ dag = DAG(
 )
 
 api_url = 'http://3.25.53.109/hua/graphql'
-postgres_conn_id = 'YOUR_POSTGRES_CONN_ID'  # Replace with your actual PostgreSQL connection ID
+postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
 owner = 'hwa205'
 
 def create_and_check_tables():

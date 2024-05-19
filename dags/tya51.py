@@ -16,7 +16,7 @@ default_args = {
 }
 
 dag = DAG(
-    'tya51_collection_pipeline_v3',
+    'collection_pipeline_tya51_v3',
     default_args=default_args,
     description='A DAG to collect data from student tya51 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval=timedelta(days=1),
