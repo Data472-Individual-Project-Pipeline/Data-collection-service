@@ -22,6 +22,6 @@ dag = DAG(
 
 trigger_update_owners_task = TriggerDagRunOperator(
     task_id='trigger_update_owners',
-    trigger_dag_id='update_owners_dag',
+    trigger_dag_id='owners_create_v1',  # This ID should match the ID in owners_create.py
     dag=dag,
 )

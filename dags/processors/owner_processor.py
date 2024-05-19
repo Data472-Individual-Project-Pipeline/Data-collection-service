@@ -11,10 +11,11 @@ class OwnerManager:
     def get_owner_names(self):
         # Scan the dags folder for DAG files, excluding subfolders and specific files
         dag_files = glob.glob(os.path.join(self.dags_folder, '*.py'))
+        exclude_files = {'owners_create.py', 'owners_update.py', 'owners.py'}
         owner_names = [
             os.path.splitext(os.path.basename(f))[0] 
             for f in dag_files 
-            if os.path.isfile(f) and os.path.basename(f) != 'owners.py'
+            if os.path.isfile(f) and os.path.basename(f) not in exclude_files
         ]
         return owner_names
 

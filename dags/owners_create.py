@@ -2,7 +2,6 @@ import sys
 import os
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from airflow.operators.dagrun_operator import TriggerDagRunOperator
 from datetime import datetime, timedelta
 import logging
 
@@ -23,7 +22,7 @@ default_args = {
 dag = DAG(
     'owners_create_v1',
     default_args=default_args,
-    description='A DAG to update the owners table based on DAG files in the dags folder',
+    description='A DAG to create the owners table and insert initial data based on DAG files in the dags folder',
     schedule_interval=None,  # Manually triggered
     start_date=datetime(2024, 5, 18),
     catchup=False,
