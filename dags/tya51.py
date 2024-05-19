@@ -4,8 +4,6 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-
-# Import the custom data processor
 from processors.tya51_processor import Tya51Processor
 
 default_args = {
