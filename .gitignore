@@ -1,10 +1,10 @@
 # Airflow configuration
-airflow.cfg
+# airflow.cfg
 airflow_login.py
 dbinit.py
 initdb.py
 secrets.py
-webserver_config.py
+# webserver_config.py
 
 # Ignore __pycache__ directories and .pyc files
 __pycache__/
