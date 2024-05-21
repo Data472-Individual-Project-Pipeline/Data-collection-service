@@ -11,7 +11,7 @@ class OwnerManager:
     def get_owner_names(self):
         # Scan the dags folder for DAG files, excluding subfolders and specific files
         dag_files = glob.glob(os.path.join(self.dags_folder, '*.py'))
-        exclude_files = {'owners_create.py', 'owners_update.py', 'owners.py'}
+        exclude_files = {'owners_create.py', 'owners_update.py', 'owners.py', 'dag_collection_data_from_bp.py', 'dag_collection_data_from_mobil.py', 'dag_collection_data_from_paknsave.py', 'dag_collection_data_from_z.py', 'dag_create_gas_station_table.py', 'dag_daily_fuel_price_generation.py'}
         owner_names = [
             os.path.splitext(os.path.basename(f))[0] 
             for f in dag_files 
