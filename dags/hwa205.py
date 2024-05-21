@@ -24,7 +24,7 @@ dag = DAG(
     catchup=False,
 )
 
-api_url = 'http://3.25.53.109/hua/graphql'
+api_url = 'http://3.27.162.136/hua/graphql'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
 owner = 'hwa205'
 
