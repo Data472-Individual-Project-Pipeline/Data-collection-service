@@ -20,7 +20,7 @@ default_args = {
 }
 
 dag = DAG(
-    'owners_create_v1',
+    'Individual_owners_create_v1',
     default_args=default_args,
     description='A DAG to create the owners table and insert initial data based on DAG files in the dags folder',
     schedule_interval=None,  # Manually triggered

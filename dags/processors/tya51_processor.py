@@ -63,7 +63,7 @@ class Tya51Processor:
         cursor.close()
         conn.close()
 
-    def try_fetch_data_for_days(self, base_url, days=5):
+    def try_fetch_data_for_days(self, base_url, days=150):
         for i in range(days):
             date_str = (datetime.utcnow() - timedelta(days=i)).strftime('%Y%m%d')
             url = f"{base_url}/{date_str}"
