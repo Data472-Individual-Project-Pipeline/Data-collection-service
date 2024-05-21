@@ -16,7 +16,7 @@ default_args = {
 }
 
 dag = DAG(
-    'collection_pipeline_hwa205_v2',
+    'Individual_collection_pipeline_hwa205_v2',
     default_args=default_args,
     description='A DAG to collect data from HWA205 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
@@ -24,7 +24,7 @@ dag = DAG(
     catchup=False,
 )
 
-api_url = 'http://3.27.162.136/hua/graphql'
+api_url = 'http://3.25.85.38:4000/graphql'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
 owner = 'hwa205'
 

@@ -12,7 +12,7 @@ default_args = {
 }
 
 dag = DAG(
-    'owners_update_v1',
+    'Individual_owners_update_v1',
     default_args=default_args,
     description='A DAG to manually trigger the update_owners_dag',
     schedule_interval=None,  # Manually triggered
