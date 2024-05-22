@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-from processors.haritha_processor import HarithaProcessor
+from dags.processors.hpa117_processor import Hpa117Processor
 
 default_args = {
     'owner': 'airflow',
@@ -16,17 +16,17 @@ default_args = {
 }
 
 dag = DAG(
-    'Individual_collection_pipeline_haritha_v1',
+    'Individual_collection_pipeline_hpa117_v1',
     default_args=default_args,
-    description='A DAG to collect data from Haritha datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from hpa117 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
     start_date=datetime(2024, 5, 18),
     catchup=False,
 )
 
-api_url = 'http://3.104.75.67/rainfall/?limit=1000'
-postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
-owner = 'haritha'
+api_url = 'http://3.104.75.67/hpa117/rainfall/?limit=1000'
+postgres_conn_id = 'postgres_data472'
+owner = 'hpa117'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")

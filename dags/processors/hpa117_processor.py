@@ -3,11 +3,11 @@ import logging
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 
-class HarithaProcessor:
+class Hpa117Processor:
     def __init__(self, postgres_conn_id, api_url):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
         self.api_url = api_url
-        self.logger = logging.getLogger("haritha_processor")
+        self.logger = logging.getLogger("hpa117_processor")
 
     def fetch_data(self):
         self.logger.info(f"Fetching data from {self.api_url}")
@@ -21,9 +21,9 @@ class HarithaProcessor:
         conn = self.hook.get_conn()
         cursor = conn.cursor()
         try:
-            self.logger.info("Checking and creating table haritha_rainfall")
+            self.logger.info("Checking and creating table hpa117_rainfall")
             cursor.execute("""
-                CREATE TABLE IF NOT EXISTS haritha_rainfall (
+                CREATE TABLE IF NOT EXISTS hpa117_rainfall (
                     id SERIAL PRIMARY KEY,
                     RainToday INT,
                     api_id UUID,
@@ -57,7 +57,7 @@ class HarithaProcessor:
             duplicate_count = 0
             for item in items:
                 cursor.execute("""
-                    SELECT 1 FROM haritha_rainfall WHERE 
+                    SELECT 1 FROM hpa117_rainfall WHERE 
                         api_id = %s
                 """, (item['id'],))
 
@@ -65,7 +65,7 @@ class HarithaProcessor:
                     duplicate_count += 1
                 else:
                     cursor.execute("""
-                        INSERT INTO haritha_rainfall (
+                        INSERT INTO hpa117_rainfall (
                             RainToday, api_id, Site_Name, Last_Sample, SITE_NO, Sub_text,
                             created_at, Last_Hour, Total_Rainfall, ShortName, SiteOwner,
                             updated_at, status, owner
