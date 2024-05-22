@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-from dags.processors.hpa117_processor import Hpa117Processor
+from processors.hpa117_processor import Hpa117Processor
 
 default_args = {
     'owner': 'airflow',
@@ -30,12 +30,12 @@ owner = 'hpa117'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")
-    processor = HarithaProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url)
+    processor = Hpa117Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     processor.check_and_create_table()
 
 def insert_data():
     logging.info("Inserting data")
-    processor = HarithaProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url)
+    processor = Hpa117Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     items = processor.fetch_data()
     processor.insert_items(items, owner)
 

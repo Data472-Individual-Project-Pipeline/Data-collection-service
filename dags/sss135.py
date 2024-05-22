@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-from dags.processors.sss135_processor import Sss135Processor
+from processors.sss135_processor import Sss135Processor 
 
 default_args = {
     'owner': 'airflow',
@@ -31,12 +31,12 @@ owner = 'sss135'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")
-    processor = ShahProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
+    processor = Sss135Processor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     processor.check_and_create_tables()
 
 def insert_data():
     logging.info("Inserting data")
-    processor = ShahProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
+    processor = Sss135Processor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     items = processor.fetch_data(api_url_1)
     processor.insert_items(items, owner)
 
