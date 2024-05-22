@@ -24,7 +24,7 @@ dag = DAG(
     catchup=False,
 )
 
-location_url = 'http://13.239.6.15:5000///get-document/river-flow-all-master-data'
+location_url = 'http://13.239.6.15:5000/get-document/river-flow-all-master-data'
 observation_base_url = 'http://13.239.6.15:5000/get-document/river-flow-transaction-data-all?start_date=2024-04-20%2010:15:00&end_date=2024-04-20%2023:15:00'
 owner = 'hra80'
 
