@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-from processors.shah_processor import ShahProcessor
+from processors.sss135_processor import Sss135Processor 
 
 default_args = {
     'owner': 'airflow',
@@ -16,9 +16,9 @@ default_args = {
 }
 
 dag = DAG(
-    'Individual_collection_pipeline_shah_v1',
+    'Individual_collection_pipeline_sss135_v1',
     default_args=default_args,
-    description='A DAG to collect data from Shah datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from sss135 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
     start_date=datetime(2024, 5, 18),
     catchup=False,
@@ -27,16 +27,16 @@ dag = DAG(
 api_url_1 = 'http://3.107.51.162:5000/Shahron/prisonstatisticsapi'
 api_url_2 = 'http://3.107.51.162:5000/Shahron/metadataapi'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
-owner = 'shah'
+owner = 'sss135'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")
-    processor = ShahProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
+    processor = Sss135Processor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     processor.check_and_create_tables()
 
 def insert_data():
     logging.info("Inserting data")
-    processor = ShahProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
+    processor = Sss135Processor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     items = processor.fetch_data(api_url_1)
     processor.insert_items(items, owner)
 

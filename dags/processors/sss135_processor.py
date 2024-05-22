@@ -3,11 +3,11 @@ import logging
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 
-class ShahProcessor:
+class Sss135Processor:
     def __init__(self, postgres_conn_id, api_url):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
         self.api_url = api_url
-        self.logger = logging.getLogger("shah_processor")
+        self.logger = logging.getLogger("sss135_processor")
 
     def fetch_data(self, api_url):
         self.logger.info(f"Fetching data from {api_url}")
@@ -21,12 +21,12 @@ class ShahProcessor:
         conn = self.hook.get_conn()
         cursor = conn.cursor()
         try:
-            self.logger.info("Checking and creating tables for shah data")
+            self.logger.info("Checking and creating tables for sss135 data")
             tables = [
                 {
-                    "name": "shah_age_group",
+                    "name": "sss135_age_group",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS shah_age_group (
+                        CREATE TABLE IF NOT EXISTS sss135_age_group (
                             id SERIAL PRIMARY KEY,
                             age_group TEXT,
                             date DATE,
@@ -37,9 +37,9 @@ class ShahProcessor:
                     """
                 },
                 {
-                    "name": "shah_ethnicity",
+                    "name": "sss135_ethnicity",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS shah_ethnicity (
+                        CREATE TABLE IF NOT EXISTS sss135_ethnicity (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             ethnicity TEXT,
@@ -50,9 +50,9 @@ class ShahProcessor:
                     """
                 },
                 {
-                    "name": "shah_offence_type",
+                    "name": "sss135_offence_type",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS shah_offence_type (
+                        CREATE TABLE IF NOT EXISTS sss135_offence_type (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             offence_type TEXT,
@@ -63,9 +63,9 @@ class ShahProcessor:
                     """
                 },
                 {
-                    "name": "shah_prisoner_population",
+                    "name": "sss135_prisoner_population",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS shah_prisoner_population (
+                        CREATE TABLE IF NOT EXISTS sss135_prisoner_population (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             gender TEXT,
@@ -78,9 +78,9 @@ class ShahProcessor:
                     """
                 },
                 {
-                    "name": "shah_security_class",
+                    "name": "sss135_security_class",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS shah_security_class (
+                        CREATE TABLE IF NOT EXISTS sss135_security_class (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             security_class TEXT,
@@ -111,7 +111,7 @@ class ShahProcessor:
                 if category == "Age Group":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM shah_age_group WHERE 
+                            SELECT 1 FROM sss135_age_group WHERE 
                                 age_group = %s AND 
                                 date = %s AND 
                                 observations = %s
@@ -125,7 +125,7 @@ class ShahProcessor:
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO shah_age_group (
+                                INSERT INTO sss135_age_group (
                                     age_group, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -138,7 +138,7 @@ class ShahProcessor:
                 elif category == "Ethnicity":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM shah_ethnicity WHERE 
+                            SELECT 1 FROM sss135_ethnicity WHERE 
                                 ethnicity = %s AND 
                                 date = %s AND 
                                 observations = %s
@@ -152,7 +152,7 @@ class ShahProcessor:
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO shah_ethnicity (
+                                INSERT INTO sss135_ethnicity (
                                     ethnicity, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -165,7 +165,7 @@ class ShahProcessor:
                 elif category == "Offence Type":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM shah_offence_type WHERE 
+                            SELECT 1 FROM sss135_offence_type WHERE 
                                 offence_type = %s AND 
                                 date = %s AND 
                                 observations = %s
@@ -179,7 +179,7 @@ class ShahProcessor:
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO shah_offence_type (
+                                INSERT INTO sss135_offence_type (
                                     offence_type, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -192,7 +192,7 @@ class ShahProcessor:
                 elif category == "Prisoner Population":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM shah_prisoner_population WHERE 
+                            SELECT 1 FROM sss135_prisoner_population WHERE 
                                 gender = %s AND 
                                 location = %s AND 
                                 date = %s AND 
@@ -208,7 +208,7 @@ class ShahProcessor:
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO shah_prisoner_population (
+                                INSERT INTO sss135_prisoner_population (
                                     gender, location, date, observations, population_type, owner
                                 ) VALUES (%s, %s, %s, %s, %s, %s)
                             """, (
@@ -223,7 +223,7 @@ class ShahProcessor:
                 elif category == "Security Class":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM shah_security_class WHERE 
+                            SELECT 1 FROM sss135_security_class WHERE 
                                 security_class = %s AND 
                                 date = %s AND 
                                 observations = %s
@@ -237,7 +237,7 @@ class ShahProcessor:
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO shah_security_class (
+                                INSERT INTO sss135_security_class (
                                     security_class, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
