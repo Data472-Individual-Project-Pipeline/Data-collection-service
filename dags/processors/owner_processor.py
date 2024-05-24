@@ -4,6 +4,7 @@ import logging
 import json
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
+
 class OwnerManager:
     def __init__(self, postgres_conn_id, dags_folder):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
@@ -51,6 +52,26 @@ class OwnerManager:
                             "name": "sss135",
                             "fullname": "Shahron Shaji ~",
                             "email": "sss135@uclive.ac.nz"
+                        },
+                        {
+                            "name": "svi40",
+                            "fullname": "Sarmilan Vignaraja",
+                            "email": "svi40@uclive.ac.nz"
+                        },
+                        {
+                        "name": "pvv13",
+                        "fullname": "Prasanna Venkatesh Venkataramanan",
+                        "email": "pvv13@uclive.ac.nz"
+                        },
+                        {
+                        "name": "are154",
+                        "fullname": "Anirudh Revathi",
+                        "email": "are154@uclive.ac.nz"
+                        },
+                        {
+                        "name": "vsu37",
+                        "fullname": "Vajiranath Sudusinghe",
+                        "email": "vsu37@uclive.ac.nz"
                         }
                     ]
                     """
@@ -71,16 +92,16 @@ class OwnerManager:
             "dag_create_gas_station_table.py",
             "dag_daily_fuel_price_generation.py",
         }
-        
+
         logging.info(f"Found DAG files: {dag_files}")
         logging.info(f"Excluding files: {exclude_files}")
-        
+
         owner_names = [
             os.path.splitext(os.path.basename(f))[0]
             for f in dag_files
             if os.path.isfile(f) and os.path.basename(f) not in exclude_files
         ]
-        
+
         logging.info(f"Detected owner names: {owner_names}")
         return owner_names
 
@@ -110,17 +131,19 @@ class OwnerManager:
         conn = self.hook.get_conn()
         cursor = conn.cursor()
         name_info_list = self.name_info_dict()
-        
+
         # 打印 owner_names 和 name_info_list 进行调试
         logging.info(f"Owner names: {owner_names}")
         logging.info(f"Name info list: {name_info_list}")
-        
+
         try:
             for name in owner_names:
-                owner_info = next((info for info in name_info_list if info['name'] == name), None)
+                owner_info = next(
+                    (info for info in name_info_list if info["name"] == name), None
+                )
                 if owner_info:
-                    fullname = owner_info['fullname']
-                    email = owner_info['email']
+                    fullname = owner_info["fullname"]
+                    email = owner_info["email"]
                     cursor.execute(
                         """
                         INSERT INTO owners (name, fullname, email) VALUES (%s, %s, %s)
