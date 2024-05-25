@@ -3,11 +3,11 @@ import logging
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 
-class Sss135Processor:
+class PrisonerProcessor:
     def __init__(self, postgres_conn_id, api_url):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
         self.api_url = api_url
-        self.logger = logging.getLogger("sss135_processor")
+        self.logger = logging.getLogger("prisoner_processor")
 
     def fetch_data(self, api_url):
         self.logger.info(f"Fetching data from {api_url}")
@@ -21,12 +21,12 @@ class Sss135Processor:
         conn = self.hook.get_conn()
         cursor = conn.cursor()
         try:
-            self.logger.info("Checking and creating tables for sss135 data")
+            self.logger.info("Checking and creating tables for prisoner data")
             tables = [
                 {
-                    "name": "sss135_age_group",
+                    "name": "prisoner_age_group",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS sss135_age_group (
+                        CREATE TABLE IF NOT EXISTS prisoner_age_group (
                             id SERIAL PRIMARY KEY,
                             age_group TEXT,
                             date DATE,
@@ -37,9 +37,9 @@ class Sss135Processor:
                     """
                 },
                 {
-                    "name": "sss135_ethnicity",
+                    "name": "prisoner_ethnicity",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS sss135_ethnicity (
+                        CREATE TABLE IF NOT EXISTS prisoner_ethnicity (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             ethnicity TEXT,
@@ -50,9 +50,9 @@ class Sss135Processor:
                     """
                 },
                 {
-                    "name": "sss135_offence_type",
+                    "name": "prisoner_offence_type",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS sss135_offence_type (
+                        CREATE TABLE IF NOT EXISTS prisoner_offence_type (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             offence_type TEXT,
@@ -63,9 +63,9 @@ class Sss135Processor:
                     """
                 },
                 {
-                    "name": "sss135_prisoner_population",
+                    "name": "prisoner_population",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS sss135_prisoner_population (
+                        CREATE TABLE IF NOT EXISTS prisoner_population (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             gender TEXT,
@@ -78,9 +78,9 @@ class Sss135Processor:
                     """
                 },
                 {
-                    "name": "sss135_security_class",
+                    "name": "prisoner_security_class",
                     "create_statement": """
-                        CREATE TABLE IF NOT EXISTS sss135_security_class (
+                        CREATE TABLE IF NOT EXISTS prisoner_security_class (
                             id SERIAL PRIMARY KEY,
                             date DATE,
                             security_class TEXT,
@@ -108,24 +108,26 @@ class Sss135Processor:
             for category, data in items.items():
                 count = 0
                 duplicate_count = 0
-                if category == "Age Group":
+                if category == "Age Group" or category == "Age Group.csv":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM sss135_age_group WHERE 
+                            SELECT 1 FROM prisoner_age_group WHERE 
                                 age_group = %s AND 
                                 date = %s AND 
-                                observations = %s
+                                observations = %s AND
+                                owner = %s
                         """, (
                             item['Age group'],
                             item['Date'],
-                            item['Observations']
+                            item['Observations'],
+                            owner
                         ))
 
                         if cursor.fetchone():
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO sss135_age_group (
+                                INSERT INTO prisoner_age_group (
                                     age_group, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -135,24 +137,26 @@ class Sss135Processor:
                                 owner
                             ))
                             count += 1
-                elif category == "Ethnicity":
+                elif category == "Ethnicity" or category == "Ethnicity.csv":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM sss135_ethnicity WHERE 
+                            SELECT 1 FROM prisoner_ethnicity WHERE 
                                 ethnicity = %s AND 
                                 date = %s AND 
-                                observations = %s
+                                observations = %s AND
+                                owner = %s
                         """, (
                             item['Ethnicity'],
                             item['Date'],
-                            item['Observations']
+                            item['Observations'],
+                            owner
                         ))
 
                         if cursor.fetchone():
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO sss135_ethnicity (
+                                INSERT INTO prisoner_ethnicity (
                                     ethnicity, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -162,24 +166,26 @@ class Sss135Processor:
                                 owner
                             ))
                             count += 1
-                elif category == "Offence Type":
+                elif category == "Offence Type" or category == "Offence Type.csv":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM sss135_offence_type WHERE 
+                            SELECT 1 FROM prisoner_offence_type WHERE 
                                 offence_type = %s AND 
                                 date = %s AND 
-                                observations = %s
+                                observations = %s AND
+                                owner = %s
                         """, (
                             item['Offense type'],
                             item['Date'],
-                            item['Observations']
+                            item['Observations'],
+                            owner
                         ))
 
                         if cursor.fetchone():
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO sss135_offence_type (
+                                INSERT INTO prisoner_offence_type (
                                     offence_type, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (
@@ -189,26 +195,28 @@ class Sss135Processor:
                                 owner
                             ))
                             count += 1
-                elif category == "Prisoner Population":
+                elif category == "Prisoner Population" or category == "Prisoner Population.csv":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM sss135_prisoner_population WHERE 
+                            SELECT 1 FROM prisoner_population WHERE 
                                 gender = %s AND 
                                 location = %s AND 
                                 date = %s AND 
-                                population_type = %s
+                                population_type = %s AND
+                                owner = %s
                         """, (
                             item['Gender'],
                             item['Location'],
                             item['Date'],
-                            item['Population Type']
+                            item['Population Type'],
+                            owner
                         ))
 
                         if cursor.fetchone():
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO sss135_prisoner_population (
+                                INSERT INTO prisoner_population (
                                     gender, location, date, observations, population_type, owner
                                 ) VALUES (%s, %s, %s, %s, %s, %s)
                             """, (
@@ -220,24 +228,26 @@ class Sss135Processor:
                                 owner
                             ))
                             count += 1
-                elif category == "Security Class":
+                elif category == "Security Class" or category == "Security Class.csv":
                     for item in data:
                         cursor.execute("""
-                            SELECT 1 FROM sss135_security_class WHERE 
+                            SELECT 1 FROM prisoner_security_class WHERE 
                                 security_class = %s AND 
                                 date = %s AND 
-                                observations = %s
+                                observations = %s AND
+                                owner = %s
                         """, (
                             item['Security class'],
                             item['Date'],
-                            item['Observations']
+                            item['Observations'],
+                            owner
                         ))
 
                         if cursor.fetchone():
                             duplicate_count += 1
                         else:
                             cursor.execute("""
-                                INSERT INTO sss135_security_class (
+                                INSERT INTO prisoner_security_class (
                                     security_class, date, observations, owner
                                 ) VALUES (%s, %s, %s, %s)
                             """, (

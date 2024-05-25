@@ -16,18 +16,18 @@ default_args = {
 }
 
 dag = DAG(
-    'Individual_collection_pipeline_sss135_v1',
+    'Individual_collection_pipeline_svi40_v1',
     default_args=default_args,
-    description='A DAG to collect data from sss135 datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from svi40 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
     start_date=datetime(2024, 5, 18),
     catchup=False,
 )
 
-api_url_1 = 'http://3.107.51.162:5000/Shahron/prisonstatisticsapi'
-api_url_2 = 'http://3.107.51.162:5000/Shahron/metadataapi'
+api_url_1 = 'http://3.107.58.175:5000/svi40/prisonstat'
+api_url_2 = 'http://3.107.58.175:5000/svi40/prisonstatmeta'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
-owner = 'sss135'
+owner = 'svi40'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")

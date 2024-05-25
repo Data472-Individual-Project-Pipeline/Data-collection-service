@@ -4,7 +4,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
 import logging
-from processors.prisoner_processor import PrisonerProcessor 
+from processors.pvv13_processor import Pvv13Processor
 
 default_args = {
     'owner': 'airflow',
@@ -16,28 +16,27 @@ default_args = {
 }
 
 dag = DAG(
-    'Individual_collection_pipeline_sss135_v1',
+    'Individual_collection_pipeline_pvv13_v1',
     default_args=default_args,
-    description='A DAG to collect data from sss135 datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from PVV13 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
     start_date=datetime(2024, 5, 18),
     catchup=False,
 )
 
-api_url_1 = 'http://3.107.51.162:5000/Shahron/prisonstatisticsapi'
-api_url_2 = 'http://3.107.51.162:5000/Shahron/metadataapi'
+api_url = 'http://13.210.241.172:5000/pvv13/national-benefits'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
-owner = 'sss135'
+owner = 'pvv13'
 
 def create_and_check_tables():
     logging.info("Creating and checking tables")
-    processor = PrisonerProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
-    processor.check_and_create_tables()
+    processor = Pvv13Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
+    processor.check_and_create_table()
 
 def insert_data():
     logging.info("Inserting data")
-    processor = PrisonerProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
-    items = processor.fetch_data(api_url_1)
+    processor = Pvv13Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
+    items = processor.fetch_data()
     processor.insert_items(items, owner)
 
 create_and_check_tables_task = PythonOperator(
