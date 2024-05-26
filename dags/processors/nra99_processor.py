@@ -25,7 +25,7 @@ class Nra99Processor:
         try:
             self.logger.info("Checking and creating table nra99_visi")
             cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS nra99-visi (
+                    CREATE TABLE IF NOT EXISTS nra99_visi (
                         id SERIAL PRIMARY KEY,
                         Year DATE,
                         Month DATE,
@@ -53,7 +53,7 @@ class Nra99Processor:
             duplicate_count = 0
             for item in items:
                 cursor.execute("""
-                        SELECT 1 FROM nra99-visi WHERE
+                        SELECT 1 FROM nra99_visi WHERE
                             Year = %s AND,
                             Month = %s AND,
                             CountryOfResidence = %s AND,
@@ -73,7 +73,7 @@ class Nra99Processor:
                     duplicate_count += 1
                 else:
                     cursor.execute("""
-                                           INSERT INTO nra99-visi (
+                                           INSERT INTO nra99_visi (
                                                Year, Month, CountryOfResidence, Purpose, NZPort, NumberOfPeople
                                            ) VALUES (%s, %s, %s, %s, %s, %s)
                                        """, (
