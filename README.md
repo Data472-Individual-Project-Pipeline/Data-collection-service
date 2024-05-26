@@ -53,7 +53,7 @@ Data-collection-service/
 1. Clone the project repository:
 
     ```sh
-    git clone https://github.com/yourusername/Data-collection-service.git
+    git clone git@github.com:Data472-Individual-Project-Pipeline/Data-collection-service.git
     cd Data-collection-service
     ```
 
