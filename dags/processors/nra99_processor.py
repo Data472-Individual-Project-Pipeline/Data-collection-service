@@ -26,8 +26,8 @@ class Nra99Processor:
             cursor.execute("""
                     CREATE TABLE IF NOT EXISTS nra99_visi (
                         id SERIAL PRIMARY KEY,
-                        Year DATE,
-                        Month DATE,
+                        Year INT,
+                        Month TEXT,
                         CountryOfResidence TEXT,
                         Purpose TEXT,
                         NZPort TEXT,
