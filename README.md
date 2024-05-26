@@ -158,3 +158,7 @@ We welcome contributions! Please read the following instructions to get started:
 3. Commit your changes (`git commit -am 'Add new feature`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Create a new Pull Request.
+
+## Contact
+
+If you have any questions, please feel free to contact the Central Collection Team or project maintainer at aemooooon@gmail.com
