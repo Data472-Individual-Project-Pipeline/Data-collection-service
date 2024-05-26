@@ -18,7 +18,6 @@ class Nra99Processor:
         self.logger.info(f"Fetched data: {data}")
         return data
 
-
     def check_and_create_table(self):
         conn = self.hook.get_conn()
         cursor = conn.cursor()
@@ -43,7 +42,6 @@ class Nra99Processor:
         finally:
             cursor.close()
             conn.close()
-
 
     def insert_items(self, items, owner):
         conn = self.hook.get_conn()
