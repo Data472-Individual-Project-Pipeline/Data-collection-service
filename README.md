@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-The Data Collection Service is a project based on Apache Airflow designed to automate the collection and processing of student data. The project includes multiple DAGs (Directed Acyclic Graphs) and processors that collect data from different sources and store it in a database.
+The Data Collection Service is a project that DATA472 Central Collection Team used to collect other student individual project data, based on Apache Airflow designed to automate the collection and processing of student data. The project includes multiple DAGs (Directed Acyclic Graphs) and processors that collect data from different sources and store it in a database.
 
 ## Directory Structure
 
@@ -58,6 +58,8 @@ Data-collection-service/
     ```
 
 2. Install dependencies:
+
+   > I highly recommend using a virtual environment to install the dependencies
 
     ```sh
     pip install -r requirements.txt
