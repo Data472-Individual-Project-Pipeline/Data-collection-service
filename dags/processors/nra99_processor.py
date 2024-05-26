@@ -72,8 +72,8 @@ class Nra99Processor:
                 else:
                     cursor.execute("""
                                            INSERT INTO nra99_visi (
-                                               Year, Month, CountryOfResidence, Purpose, NZPort, NumberOfPeople
-                                           ) VALUES (%s, %s, %s, %s, %s, %s)
+                                               Year, Month, CountryOfResidence, Purpose, NZPort, NumberOfPeople, owner
+                                           ) VALUES (%s, %s, %s, %s, %s, %s, %s)
                                        """, (
                         item['Year'],
                         item['Month'],
