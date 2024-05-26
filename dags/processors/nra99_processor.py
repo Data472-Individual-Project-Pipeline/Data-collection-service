@@ -89,7 +89,7 @@ class Nra99Processor:
                 conn.commit()
                 self.logger.info(f"{count} items inserted.")
                 self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-            except Exception as e:
+        except Exception as e:
             self.logger.error(f"Error inserting items: {e}")
         finally:
             cursor.close()
