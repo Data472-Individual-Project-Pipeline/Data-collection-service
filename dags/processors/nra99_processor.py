@@ -52,11 +52,11 @@ class Nra99Processor:
             for item in items:
                 cursor.execute("""
                         SELECT 1 FROM nra99_visi WHERE
-                            Year = %s AND,
-                            Month = %s AND,
-                            CountryOfResidence = %s AND,
-                            Purpose = %s AND,
-                            NZPort = %s AND,
+                            Year = %s AND
+                            Month = %s AND
+                            CountryOfResidence = %s AND
+                            Purpose = %s AND
+                            NZPort = %s AND
                             NumberOfPeople = %s
                     """, (
                     item['Year'],

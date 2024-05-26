@@ -28,16 +28,19 @@ api_url = 'http://3.106.235.179:3000/nra99/visitors/all/html'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
 owner = 'nra99'
 
+
 def create_and_check_tables():
     logging.info("Creating and checking tables")
     processor = Nra99Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     processor.check_and_create_table()
+
 
 def insert_data():
     logging.info("Inserting data")
     processor = Nra99Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     items = processor.fetch_data()
     processor.insert_items(items, owner)
+
 
 create_and_check_tables_task = PythonOperator(
     task_id='create_and_check_tables',
