@@ -18,7 +18,7 @@ default_args = {
 dag = DAG(
     'Individual_collection_pipeline_nra99_v1',
     default_args=default_args,
-    description='A DAG to collect data from DUS15 datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from NRA99 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval='0 0 * * *',  # Runs daily at midnight
     start_date=datetime(2024, 5, 18),
     catchup=False,
