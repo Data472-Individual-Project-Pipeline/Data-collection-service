@@ -1,7 +1,8 @@
-import requests
 import logging
+
+import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime
+
 
 class Hwa205Processor:
     def __init__(self, postgres_conn_id, api_url):

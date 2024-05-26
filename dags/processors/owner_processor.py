@@ -1,7 +1,8 @@
-import os
 import glob
-import logging
 import json
+import logging
+import os
+
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 

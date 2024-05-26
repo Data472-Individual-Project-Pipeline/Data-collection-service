@@ -1,7 +1,8 @@
-import requests
 import logging
+
+import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime
+
 
 class PrisonerProcessor:
     def __init__(self, postgres_conn_id, api_url):
@@ -259,7 +260,8 @@ class PrisonerProcessor:
                             count += 1
                 conn.commit()
                 self.logger.info(f"{count} items inserted into {category.lower().replace(' ', '_')}.")
-                self.logger.info(f"{duplicate_count} items were duplicates and not inserted into {category.lower().replace(' ', '_')}.")
+                self.logger.info(
+                    f"{duplicate_count} items were duplicates and not inserted into {category.lower().replace(' ', '_')}.")
         except Exception as e:
             self.logger.error(f"Error inserting items: {e}")
         finally:

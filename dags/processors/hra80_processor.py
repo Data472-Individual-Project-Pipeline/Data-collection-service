@@ -1,12 +1,14 @@
+import logging
+from datetime import datetime, timedelta
+
 import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime, timedelta
-import logging
+
 
 class Hra80Processor:
     def __init__(self, postgres_conn_id):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
-    
+
     def fetch_data(self, url):
         logging.info(f"Fetching data from {url}")
         try:
@@ -48,7 +50,8 @@ class Hra80Processor:
             columns = ', '.join(data.keys())
             values = ', '.join([f'%({k})s' for k in data.keys()])
             if table_name == 'hra80_observation':
-                update_values = ', '.join([f"{k} = EXCLUDED.{k}" for k in data.keys() if k not in ('locationId', 'timestamp')])
+                update_values = ', '.join(
+                    [f"{k} = EXCLUDED.{k}" for k in data.keys() if k not in ('locationId', 'timestamp')])
                 conflict_columns = '(locationId, timestamp)'
             else:
                 update_values = ', '.join([f"{k} = EXCLUDED.{k}" for k in data.keys() if k != 'locationId'])
@@ -83,7 +86,7 @@ class Hra80Processor:
         # Fetch and insert location data
         location_data = self.fetch_data(location_url)
         self.insert_data('hra80_location', location_data, owner)
-        
+
         # Fetch and insert observation data
         observation_data = self.try_fetch_data_for_days(observation_base_url)
         if observation_data:

@@ -1,9 +1,9 @@
-import sys
-import os
+import logging
+from datetime import datetime, timedelta
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime, timedelta
-import logging
+
 from processors.nra99_processor import Nra99Processor
 
 default_args = {

@@ -1,9 +1,9 @@
-import sys
-import os
+import logging
+from datetime import datetime, timedelta
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime, timedelta
-import logging
+
 from processors.hpa117_processor import Hpa117Processor
 
 default_args = {
@@ -28,16 +28,19 @@ api_url = 'http://3.104.75.67/hpa117/rainfall/?limit=1000'
 postgres_conn_id = 'postgres_data472'
 owner = 'hpa117'
 
+
 def create_and_check_tables():
     logging.info("Creating and checking tables")
     processor = Hpa117Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     processor.check_and_create_table()
+
 
 def insert_data():
     logging.info("Inserting data")
     processor = Hpa117Processor(postgres_conn_id=postgres_conn_id, api_url=api_url)
     items = processor.fetch_data()
     processor.insert_items(items, owner)
+
 
 create_and_check_tables_task = PythonOperator(
     task_id='create_and_check_tables',

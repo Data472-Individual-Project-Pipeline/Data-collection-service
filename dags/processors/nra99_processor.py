@@ -1,7 +1,7 @@
-import requests
 import logging
+
+import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
-from datetime import datetime
 
 
 class Nra99Processor:

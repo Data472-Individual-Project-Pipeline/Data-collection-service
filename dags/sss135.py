@@ -1,10 +1,10 @@
-import sys
-import os
+import logging
+from datetime import datetime, timedelta
+
 from airflow import DAG
 from airflow.operators.python import PythonOperator
-from datetime import datetime, timedelta
-import logging
-from processors.prisoner_processor import PrisonerProcessor 
+
+from processors.prisoner_processor import PrisonerProcessor
 
 default_args = {
     'owner': 'airflow',
@@ -29,16 +29,19 @@ api_url_2 = 'http://3.107.51.162:5000/Shahron/metadataapi'
 postgres_conn_id = 'postgres_data472'  # Replace with your actual PostgreSQL connection ID
 owner = 'sss135'
 
+
 def create_and_check_tables():
     logging.info("Creating and checking tables")
     processor = PrisonerProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     processor.check_and_create_tables()
+
 
 def insert_data():
     logging.info("Inserting data")
     processor = PrisonerProcessor(postgres_conn_id=postgres_conn_id, api_url=api_url_1)
     items = processor.fetch_data(api_url_1)
     processor.insert_items(items, owner)
+
 
 create_and_check_tables_task = PythonOperator(
     task_id='create_and_check_tables',
