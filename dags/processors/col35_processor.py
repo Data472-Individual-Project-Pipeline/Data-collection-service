@@ -331,7 +331,7 @@ class Col35Processor:
                     duplicate_count += 1
                 else:
                     cursor.execute("""
-                            INSERT INTO prisoner_offence_type (
+                            INSERT INTO prisoner_sentence_type (
                                 date, observations, type, owner
                             ) VALUES (%s, %s, %s, %s)
                         """, (
