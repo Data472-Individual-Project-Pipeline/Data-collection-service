@@ -91,261 +91,95 @@ class Col35Processor:
             cursor.close()
             conn.close()
 
-    def insert_items(self, items, owner):
+    def insert_items(self, item_data, owner):
+        # try a hack to see if it works
+        self._insert_age_group(item_data['Age'], owner)
+        self._insert_ethnicity(item_data['Ethnicity'], owner)
+        self._insert_gender(item_data['Gender'], owner)
+        self._insert_number_of_sentences(item_data['NoOfSentences'], owner)
+        self._insert_offence_type(item_data['Offencetype'], owner)
+        self._insert_sentence_type(item_data['Type'], owner)
+
+    def execute_insert_items(self, items, table, unique_fields, table_fields, owner):
         conn = self.hook.get_conn()
         cursor = conn.cursor()
         try:
             count = 0
             duplicate_count = 0
-            # modify for this selection because each field is different.
-
-            for item in items['Age']:
-                cursor.execute("""
-                    SELECT 1 FROM prisoner_age_group WHERE 
-                        age_group = %s AND 
-                        date = %s AND 
-                        observations = %s
-                """, (
-                    item['Age'],
-                    item['Date'],
-                    item['Observations']
-                ))
-
+            for item in items:  # item field
+                # found an issue with unique values parsing the fields hopefully this means the code works
+                unique_values = tuple(f'{item[field]}' for field in table_fields)
+                cursor.execute(
+                    f"""SELECT 1 FROM {table} WHERE {" AND ".join(f'{field} = %s' for field in unique_fields)}""",
+                    unique_values)
                 if cursor.fetchone():
                     duplicate_count += 1
                 else:
-                    cursor.execute("""
-                        INSERT INTO prisoner_age_group (
-                            age_group, date, observations, owner
-                        ) VALUES (%s, %s, %s, %s)
-                    """, (
-                        item['Age'],
-                        item['Date'],
-                        item['Observations'],
-                        owner
-                    ))
+                    insert_values = tuple(item[field] for field in table_fields) + (owner,)
+                    cursor.execute(f"""
+                               INSERT INTO {table} ({", ".join(unique_fields)}, owner)
+                               VALUES ({", ".join("%s" for _ in table_fields)}, %s)
+                           """, insert_values)
                     count += 1
             conn.commit()
-            self.logger.info(f"{count} items inserted.")
-            self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
+            self.logger.info(f"{count} items inserted into {table}.")
+            self.logger.info(f"{duplicate_count} duplicate items not inserted into {table}.")
         except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-        # second header
-        conn = self.hook.get_conn()
-        cursor = conn.cursor()
-        try:
-            count = 0
-            duplicate_count = 0
-            # modify for this selection because each field is different.
-
-            for item in items['Ethnicity']:
-                cursor.execute("""
-                    SELECT 1 FROM prisoner_ethnicity WHERE 
-                        date = %s AND 
-                        ethnicity = %s AND 
-                        observations = %s
-                """, (
-                    item['Date'],
-                    item['Ethnicity'],
-                    item['Observations']
-                ))
-
-                if cursor.fetchone():
-                    duplicate_count += 1
-                else:
-                    cursor.execute("""
-                        INSERT INTO prisoner_ethnicity (
-                            date, ethnicity, observations, owner
-                        ) VALUES (%s, %s, %s, %s)
-                    """, (
-                        item['Age'],
-                        item['Date'],
-                        item['Observations'],
-                        owner
-                    ))
-                    count += 1
-            conn.commit()
-            self.logger.info(f"{count} items inserted.")
-            self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-        except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-        # third connector
-        conn = self.hook.get_conn()
-        cursor = conn.cursor()
-        try:
-            count = 0
-            duplicate_count = 0
-            # modify for this selection because each field is different.
-
-            for item in items['Gender']:
-                cursor.execute("""
-                    SELECT 1 FROM prisoner_population WHERE 
-                        date = %s AND 
-                        gender = %s AND 
-                        observations = %s
-                """, (
-                    item['Date'],
-                    item['Gender'],
-                    item['Observations']
-                ))
-
-                if cursor.fetchone():
-                    duplicate_count += 1
-                else:
-                    cursor.execute("""
-                        INSERT INTO prisoner_population (
-                            date, gender, observations, owner
-                        ) VALUES (%s, %s, %s, %s)
-                    """, (
-                        item['Date'],
-                        item['Gender'],
-                        item['Observations'],
-                        owner
-                    ))
-                    count += 1
-            conn.commit()
-            self.logger.info(f"{count} items inserted.")
-            self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-        except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
-        finally:
-            cursor.close()
-            conn.close()
-        # NoOfSentences
-        conn = self.hook.get_conn()
-        cursor = conn.cursor()
-        try:
-            count = 0
-            duplicate_count = 0
-            # modify for this selection because each field is different.
-            for item in items['NoOfSentences']:
-                if not item['Type'] == 'Total':
-                    cursor.execute("""
-                                    SELECT 1 FROM prisoner_number_sentences WHERE
-                                        city = %s AND 
-                                        date = %s AND 
-                                        observations = %s AND 
-                                        type = %s
-                                """, (
-                        item['City'],
-                        item['Date'],
-                        item['Observations'],
-                        item['Type']
-
-                    ))
-
-                    if cursor.fetchone():
-                        duplicate_count += 1
-                    else:
-                        cursor.execute("""
-                                        INSERT INTO prisoner_number_sentences (
-                                            city, date, observations, type, owner
-                                        ) VALUES (%s, %s, %s, %s, %s)
-                                    """, (
-                            item['City'],
-                            item['Date'],
-                            item['Observations'],
-                            item['Type'],
-                            owner
-                        ))
-                        count += 1
-                    conn.commit()
-                    self.logger.info(f"{count} items inserted.")
-                    self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-        except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
+            self.logger.error(f"Error inserting items into {table}: {e}")
         finally:
             cursor.close()
             conn.close()
 
-        # OffenceType
-        conn = self.hook.get_conn()
-        cursor = conn.cursor()
-        try:
-            count = 0
-            duplicate_count = 0
-            # modify for this selection because each field is different.
+    def _insert_age_group(self, items, owner):
+        self.execute_insert_items(
+            items,
+            table='prisoner_age_group',
+            unique_fields=['age_group', 'date', 'observations'],
+            table_fields=['Age', 'Date', 'Observations'],
+            owner=owner
+        )
 
-            for item in items['OffenceType']:
-                cursor.execute("""
-                        SELECT 1 FROM prisoner_offence_type WHERE 
-                            date = %s AND 
-                            observations = %s AND
-                            offence_type = %s
-                    """, (
-                    item['Date'],
-                    item['Observations'],
-                    item['Offence type']
-                ))
+    def _insert_ethnicity(self, items, owner):
+        self.execute_insert_items(
+            items,
+            table='prisoner_ethnicity',
+            unique_fields=['date', 'ethnicity', 'observations'],
+            table_fields=['Date', 'Ethnicity', 'Observations'],
+            owner=owner
+        )
 
-                if cursor.fetchone():
-                    duplicate_count += 1
-                else:
-                    cursor.execute("""
-                            INSERT INTO prisoner_offence_type (
-                                date, observations, offence_type, owner
-                            ) VALUES (%s, %s, %s, %s)
-                        """, (
-                        item['Date'],
-                        item['Observations'],
-                        item['Offence type'],
-                        owner
-                    ))
-                    count += 1
-            conn.commit()
-            self.logger.info(f"{count} items inserted.")
-            self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-        except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+    def _insert_gender(self, items, owner):
+        self.execute_insert_items(
+            items,
+            table='prisoner_population',
+            unique_fields=['date', 'gender', 'observations'],
+            table_fields=['Date', 'Gender', 'Observations'],
+            owner=owner
+        )
 
-        # Type (sentence_type)
-        conn = self.hook.get_conn()
-        cursor = conn.cursor()
-        try:
-            count = 0
-            duplicate_count = 0
-            # modify for this selection because each field is different.
+    def _insert_number_of_sentences(self, items, owner):
+        self.execute_insert_items(
+            [item for item in items if item['Type'] != 'Total'],
+            table='prisoner_number_sentences',
+            unique_fields=['city', 'date', 'observations', 'type'],
+            table_fields=['City', 'Date', 'Observations', 'Type'],
+            owner=owner
+        )
 
-            for item in items['Type']:
-                cursor.execute("""
-                        SELECT 1 FROM prisoner_sentence_type WHERE 
-                            date = %s AND 
-                            observations = %s AND
-                            type = %s
-                    """, (
-                    item['Date'],
-                    item['Observations'],
-                    item['Type']
-                ))
+    def _insert_offence_type(self, items, owner):
+        self.execute_insert_items(
+            items,
+            table='prisoner_offence_type',
+            unique_fields=['date', 'observations', 'offence_type'],
+            table_fields=['Date', 'Observations', 'Offence type'],
+            owner=owner
+        )
 
-                if cursor.fetchone():
-                    duplicate_count += 1
-                else:
-                    cursor.execute("""
-                            INSERT INTO prisoner_sentence_type (
-                                date, observations, type, owner
-                            ) VALUES (%s, %s, %s, %s)
-                        """, (
-                        item['Date'],
-                        item['Observations'],
-                        item['Type'],
-                        owner
-                    ))
-                    count += 1
-            conn.commit()
-            self.logger.info(f"{count} items inserted.")
-            self.logger.info(f"{duplicate_count} items were duplicates and not inserted.")
-        except Exception as e:
-            self.logger.error(f"Error inserting items: {e}")
-        finally:
-            cursor.close()
-            conn.close()
+    def _insert_sentence_type(self, items, owner):
+        self.execute_insert_items(
+            items,
+            table='prisoner_sentence_type',
+            unique_fields=['date', 'observations', 'type'],
+            table_fields=['Date', 'Observations', 'Type'],
+            owner=owner
+        )
