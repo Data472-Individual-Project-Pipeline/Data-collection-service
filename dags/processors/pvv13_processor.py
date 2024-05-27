@@ -1,7 +1,9 @@
-import requests
 import logging
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
+
+import requests
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
 
 class Pvv13Processor:
     def __init__(self, postgres_conn_id, api_url):

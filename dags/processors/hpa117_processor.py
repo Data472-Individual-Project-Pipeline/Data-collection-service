@@ -1,7 +1,9 @@
-import requests
 import logging
-from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
+
+import requests
+from airflow.providers.postgres.hooks.postgres import PostgresHook
+
 
 class Hpa117Processor:
     def __init__(self, postgres_conn_id, api_url):
@@ -82,7 +84,8 @@ class Hpa117Processor:
                         item['Total_Rainfall'],
                         item['ShortName'],
                         item['SiteOwner'],
-                        datetime.strptime(item['updated_at'], '%Y-%m-%dT%H:%M:%S.%f+00:00') if item['updated_at'] else None,
+                        datetime.strptime(item['updated_at'], '%Y-%m-%dT%H:%M:%S.%f+00:00') if item[
+                            'updated_at'] else None,
                         item['status'],
                         owner
                     ))
