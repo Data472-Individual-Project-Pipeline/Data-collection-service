@@ -31,7 +31,7 @@ class Col35Processor:
                     observations FLOAT64,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
-                )
+                );
                 CREATE TABLE IF NOT EXISTS prisoner_ethnicity (
                     id SERIAL PRIMARY KEY,
                     date DATE,
@@ -39,7 +39,7 @@ class Col35Processor:
                     observations FLOAT64,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
-                )
+                );
                 CREATE TABLE IF NOT EXISTS prisoner_offence_type (
                     id SERIAL PRIMARY KEY,
                     date DATE,
@@ -47,7 +47,7 @@ class Col35Processor:
                     observations FLOAT64,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT                    
-                )
+                );
                CREATE TABLE IF NOT EXISTS prisoner_population (
                     id SERIAL PRIMARY KEY,
                     date DATE,
@@ -57,7 +57,7 @@ class Col35Processor:
                     population_type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT                                                  
-               )
+               );
                CREATE TABLE IF NOT EXISTS prisoner_number_sentences (
                     id SERIAL PRIMARY KEY,
                     city TEXT,
@@ -66,7 +66,7 @@ class Col35Processor:
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT                     
-               )
+               );
                 CREATE TABLE IF NOT EXISTS prisoner_sentence_type (
                     id SERIAL PRIMARY KEY,
                     date DATE,
@@ -74,7 +74,7 @@ class Col35Processor:
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT                     
-               )
+               );
             """)
             conn.commit()
         except Exception as e:
