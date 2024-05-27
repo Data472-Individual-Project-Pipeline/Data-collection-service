@@ -23,7 +23,7 @@ class Col35Processor:
         cursor = conn.cursor()
         try:
             self.logger.info("Checking and creating table prisoner_age_group")
-            cursor.execute("""
+            create_tables_query = """
                 CREATE TABLE IF NOT EXISTS prisoner_age_group (
                     id SERIAL PRIMARY KEY,
                     age_group TEXT,
@@ -32,6 +32,7 @@ class Col35Processor:
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 );
+            
                 CREATE TABLE IF NOT EXISTS prisoner_ethnicity (
                     id SERIAL PRIMARY KEY,
                     date DATE,
@@ -40,15 +41,17 @@ class Col35Processor:
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 );
+            
                 CREATE TABLE IF NOT EXISTS prisoner_offence_type (
                     id SERIAL PRIMARY KEY,
                     date DATE,
                     offence_type TEXT,
                     observations FLOAT64,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    owner TEXT                    
+                    owner TEXT
                 );
-               CREATE TABLE IF NOT EXISTS prisoner_population (
+            
+                CREATE TABLE IF NOT EXISTS prisoner_population (
                     id SERIAL PRIMARY KEY,
                     date DATE,
                     gender TEXT,
@@ -56,26 +59,31 @@ class Col35Processor:
                     observations FLOAT64,
                     population_type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    owner TEXT                                                  
-               );
-               CREATE TABLE IF NOT EXISTS prisoner_number_sentences (
+                    owner TEXT
+                );
+            
+                CREATE TABLE IF NOT EXISTS prisoner_number_sentences (
                     id SERIAL PRIMARY KEY,
                     city TEXT,
                     date DATE,
                     observations FLOAT64,
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    owner TEXT                     
-               );
+                    owner TEXT
+                );
+            
                 CREATE TABLE IF NOT EXISTS prisoner_sentence_type (
                     id SERIAL PRIMARY KEY,
                     date DATE,
                     observations FLOAT64,
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    owner TEXT                     
-               );
-            """)
+                    owner TEXT
+                );
+            """
+
+            # Execute the query
+            cursor.execute(create_tables_query)
             conn.commit()
         except Exception as e:
             self.logger.error(f"Error creating table: {e}")
