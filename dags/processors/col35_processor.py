@@ -28,7 +28,7 @@ class Col35Processor:
                     id SERIAL PRIMARY KEY,
                     age_group TEXT,
                     date DATE,
-                    observations FLOAT64,
+                    observations REAL,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 );
@@ -37,7 +37,7 @@ class Col35Processor:
                     id SERIAL PRIMARY KEY,
                     date DATE,
                     ethnicity TEXT,
-                    observations FLOAT64,
+                    observations REAL,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 );
@@ -46,7 +46,7 @@ class Col35Processor:
                     id SERIAL PRIMARY KEY,
                     date DATE,
                     offence_type TEXT,
-                    observations FLOAT64,
+                    observations REAL,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
                 );
@@ -56,7 +56,7 @@ class Col35Processor:
                     date DATE,
                     gender TEXT,
                     location TEXT,
-                    observations FLOAT64,
+                    observations REAL,
                     population_type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
@@ -66,7 +66,7 @@ class Col35Processor:
                     id SERIAL PRIMARY KEY,
                     city TEXT,
                     date DATE,
-                    observations FLOAT64,
+                    observations REAL,
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
@@ -75,7 +75,7 @@ class Col35Processor:
                 CREATE TABLE IF NOT EXISTS prisoner_sentence_type (
                     id SERIAL PRIMARY KEY,
                     date DATE,
-                    observations FLOAT64,
+                    observations REAL,
                     type TEXT,
                     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     owner TEXT
