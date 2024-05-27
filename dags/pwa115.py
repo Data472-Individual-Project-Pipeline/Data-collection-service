@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from processors.hra80_processor import Hra80Processor
+from processors.pwa115_processor import Pwa115Processor
 from processors.river_flow_db_processor import create_and_check_tables
 
 default_args = {
@@ -17,17 +17,17 @@ default_args = {
 }
 
 dag = DAG(
-    'Individual_collection_pipeline_hra80_v1',
+    'Individual_collection_pipeline_pwa115_v1',
     default_args=default_args,
-    description='A DAG to collect data from student hra80 datasets and insert into a Postgres database on AWS RDS',
+    description='A DAG to collect data from student pwa115 datasets and insert into a Postgres database on AWS RDS',
     schedule_interval=timedelta(days=1),
     start_date=datetime(2024, 5, 18),
     catchup=False,
 )
 
-location_url = 'http://13.239.6.15:5000/get-document/river-flow-all-master-data'
-observation_base_url = 'http://13.239.6.15:5000/get-document/river-flow-transaction-data-all?start_date=2024-04-20%2010:15:00&end_date=2024-04-20%2023:15:00'
-owner = 'hra80'
+location_url = 'http://54.253.107.227/pwa115/get_locations'
+observation_base_url = 'http://54.253.107.227/pwa115/get_observations'
+owner = 'pwa115'
 
 # Task to create and check tables
 create_and_check_tables_task = PythonOperator(
@@ -39,7 +39,7 @@ create_and_check_tables_task = PythonOperator(
 
 def insert_data():
     logging.info("Inserting data")
-    processor = Hra80Processor(postgres_conn_id='postgres_data472')
+    processor = Pwa115Processor(postgres_conn_id='postgres_data472')
     processor.process(location_url, observation_base_url, owner)
 
 # Task to insert data
