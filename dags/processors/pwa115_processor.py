@@ -5,7 +5,7 @@ import requests
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 
-class Tya51Processor:
+class Pwa115Processor:
     def __init__(self, postgres_conn_id):
         self.hook = PostgresHook(postgres_conn_id=postgres_conn_id)
 
@@ -49,7 +49,7 @@ class Tya51Processor:
         cursor.close()
         conn.close()
 
-    def try_fetch_data_for_days(self, base_url, days=150):
+    def try_fetch_data_for_days(self, base_url, days=5):
         for i in range(days):
             date_str = (datetime.utcnow() - timedelta(days=i)).strftime('%Y%m%d')
             url = f"{base_url}/{date_str}"
@@ -58,12 +58,14 @@ class Tya51Processor:
                 logging.info(f"Data found for date {date_str}")
                 return data
             logging.info(f"No data found for date {date_str}, trying previous day")
-        logging.warning("No data found for the past 5 days")
+        logging.warning(f"No data found for the past {days} days")
         return []
 
     def process(self, location_url, observation_base_url, owner):
         # Fetch and insert location data
         location_data = self.fetch_data(location_url)
+        if 'data' in location_data and 'getObservations' in location_data['data']:
+            location_data = location_data['data']['getObservations']
         self.insert_data('riverflow_location', location_data, owner)
 
         # Fetch and insert observation data

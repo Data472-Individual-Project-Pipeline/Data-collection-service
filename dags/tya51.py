@@ -5,6 +5,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 
 from processors.tya51_processor import Tya51Processor
+from processors.river_flow_db_processor import create_and_check_tables
 
 default_args = {
     'owner': 'airflow',
@@ -28,48 +29,18 @@ location_url = 'http://13.236.194.130/tya51/api/river/location'
 observation_base_url = 'http://13.236.194.130/tya51/api/river/observation'
 owner = 'tya51'
 
-
-def create_and_check_tables():
-    logging.info("Creating and checking tables")
-    processor = Tya51Processor(postgres_conn_id='postgres_data472')
-    location_table_schema = """
-    CREATE TABLE IF NOT EXISTS tya51_location (
-        locationId VARCHAR PRIMARY KEY,
-        name VARCHAR,
-        nztmx INTEGER,
-        nztmy INTEGER,
-        type VARCHAR,
-        unit VARCHAR,
-        owner VARCHAR,
-        inserted_at TIMESTAMP
-    );
-    """
-    observation_table_schema = """
-    CREATE TABLE IF NOT EXISTS tya51_observation (
-        locationId VARCHAR,
-        qualityCode VARCHAR,
-        timestamp TIMESTAMP,
-        value FLOAT,
-        owner VARCHAR,
-        inserted_at TIMESTAMP,
-        PRIMARY KEY (locationId, timestamp)
-    );
-    """
-    processor.create_tables(location_table_schema, observation_table_schema)
-
+# Task to create and check tables
+create_and_check_tables_task = PythonOperator(
+    task_id='create_and_check_tables',
+    python_callable=create_and_check_tables,
+    op_kwargs={'postgres_conn_id': 'postgres_data472'},
+    dag=dag,
+)
 
 def insert_data():
     logging.info("Inserting data")
     processor = Tya51Processor(postgres_conn_id='postgres_data472')
     processor.process(location_url, observation_base_url, owner)
-
-
-# Task to create and check tables
-create_and_check_tables_task = PythonOperator(
-    task_id='create_and_check_tables',
-    python_callable=create_and_check_tables,
-    dag=dag,
-)
 
 # Task to insert data
 insert_data_task = PythonOperator(
