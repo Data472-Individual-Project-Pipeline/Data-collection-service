@@ -13,68 +13,93 @@ class OwnerManager:
 
     def name_info_dict(self):
         name_info = """
-                    [
-                        {
-                            "name": "hwa205",
-                            "fullname": "Hua Wang",
-                            "email": "hwa205@uclive.ac.nz"
-                        },
-                        {
-                            "name": "tya51",
-                            "fullname": "Tao Yan",
-                            "email": "tya51@uclive.ac.nz"
-                        },
-                        {
-                            "name": "jjm148",
-                            "fullname": "Julian Maranan & Sridhar Vannada",
-                            "email": "jjm148@uclive.ac.nz"
-                        },
-                        {
-                            "name": "dus15",
-                            "fullname": "Dimitrii Ustinov",
-                            "email": "dus15@uclive.ac.nz"
-                        },
-                        {
-                            "name": "rna104",
-                            "fullname": "Roman Naumov",
-                            "email": "rna104@uclive.ac.nz"
-                        },
-                        {
-                            "name": "hpa117",
-                            "fullname": "Haritha Parthiban",
-                            "email": "hpa117@uclive.ac.nz"
-                        },
-                        {
-                            "name": "ruben",
-                            "fullname": "Ruben Castaing",
-                            "email": "ruben.castaing@pg.canterbury.ac.nz"
-                        },
-                        {
-                            "name": "sss135",
-                            "fullname": "Shahron Shaji ~",
-                            "email": "sss135@uclive.ac.nz"
-                        },
-                        {
-                            "name": "svi40",
-                            "fullname": "Sarmilan Vignaraja",
-                            "email": "svi40@uclive.ac.nz"
-                        },
-                        {
-                        "name": "pvv13",
-                        "fullname": "Prasanna Venkatesh Venkataramanan",
-                        "email": "pvv13@uclive.ac.nz"
-                        },
-                        {
-                        "name": "are154",
-                        "fullname": "Anirudh Revathi",
-                        "email": "are154@uclive.ac.nz"
-                        },
-                        {
-                        "name": "vsu37",
-                        "fullname": "Vajiranath Sudusinghe",
-                        "email": "vsu37@uclive.ac.nz"
-                        }
-                    ]
+ [
+    {
+        "name": "hwa205",
+        "fullname": "Hua Wang",
+        "email": "hwa205@uclive.ac.nz"
+    },
+    {
+        "name": "tya51",
+        "fullname": "Tao Yan",
+        "email": "tya51@uclive.ac.nz"
+    },
+    {
+        "name": "jjm148",
+        "fullname": "Julian Maranan & Sridhar Vannada",
+        "email": "jjm148@uclive.ac.nz"
+    },
+    {
+        "name": "dus15",
+        "fullname": "Dimitrii Ustinov",
+        "email": "dus15@uclive.ac.nz"
+    },
+    {
+        "name": "rna104",
+        "fullname": "Roman Naumov",
+        "email": "rna104@uclive.ac.nz"
+    },
+    {
+        "name": "hpa117",
+        "fullname": "Haritha Parthiban",
+        "email": "hpa117@uclive.ac.nz"
+    },
+    {
+        "name": "ruben",
+        "fullname": "Ruben Castaing",
+        "email": "ruben.castaing@pg.canterbury.ac.nz"
+    },
+    {
+        "name": "sss135",
+        "fullname": "Shahron Shaji ~",
+        "email": "sss135@uclive.ac.nz"
+    },
+    {
+        "name": "svi40",
+        "fullname": "Sarmilan Vignaraja",
+        "email": "svi40@uclive.ac.nz"
+    },
+    {
+        "name": "pvv13",
+        "fullname": "Prasanna Venkatesh Venkataramanan",
+        "email": "pvv13@uclive.ac.nz"
+    },
+    {
+        "name": "are154",
+        "fullname": "Anirudh Revathi",
+        "email": "are154@uclive.ac.nz"
+    },
+    {
+        "name": "vsu37",
+        "fullname": "Vajiranath Sudusinghe",
+        "email": "vsu37@uclive.ac.nz"
+    },
+    {
+        "name": "nra99",
+        "fullname": "Naman Rastogi",
+        "email": "nra99@uclive.ac.nz"
+    },
+    {
+        "name": "pwa115",
+        "fullname": "Panli Wang",
+        "email": "pwa115@uclive.ac.nz"
+    },
+    {
+        "name": "col35",
+        "fullname": "Camila Olivero",
+        "email": "col35@uclive.ac.nz"
+    },
+    {
+        "name": "hra80",
+        "fullname": "HussainRavat",
+        "email": "hra80@uclive.ac.nz"
+    },
+    {
+        "name": "jess",
+        "fullname": "Jess Napper",
+        "email": "jess.napper@pg.canterbury.ac.nz"
+    }
+]
                     """
         return json.loads(name_info)
 
